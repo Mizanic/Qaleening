@@ -3,9 +3,17 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
 import { DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } from "@react-navigation/drawer";
 import { router } from "expo-router";
+import { useAuth } from "@/stores/authStore";
 
 const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     const { colors } = useTheme();
+    const { logout } = useAuth();
+
+    const handleLogout = async () => {
+        await logout();
+        props.navigation.closeDrawer();
+        router.replace("/(auth)/login");
+    };
 
     return (
         <DrawerContentScrollView {...props} style={{ backgroundColor: colors.surface.primary }}>
@@ -27,6 +35,14 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 
             {/* Navigation Items */}
             <DrawerItemList {...props} />
+
+            {/* Divider */}
+            <View style={[styles.divider, { backgroundColor: colors.border.accent }]} />
+
+            {/* Logout */}
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout} accessibilityRole="button">
+                <Text style={[styles.logoutText, { color: colors.content.primary }]}>Logout</Text>
+            </TouchableOpacity>
         </DrawerContentScrollView>
     );
 };
@@ -67,6 +83,15 @@ const styles = StyleSheet.create({
     divider: {
         height: 1,
         marginBottom: 8,
+    },
+    logoutButton: {
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        marginTop: 8,
+    },
+    logoutText: {
+        fontSize: 16,
+        fontWeight: "600",
     },
 });
 
