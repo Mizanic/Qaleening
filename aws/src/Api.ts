@@ -113,6 +113,20 @@ export class ApiStack extends Stack {
             removalPolicy: RemovalPolicy.DESTROY,
         });
 
+        // Create admin user group (L2 construct)
+        const adminGroup = userPool.addGroup("AdminGroup", {
+            groupName: "admin",
+            description: "Administrator users with full access to manage mosques, appointments, and user requests",
+            precedence: 0, // Highest precedence
+        });
+
+        // Create regular user group (L2 construct)
+        const userGroup = userPool.addGroup("UserGroup", {
+            groupName: "user",
+            description: "Regular users who can request appointments and manage their mosque associations",
+            precedence: 1, // Lower precedence than admin
+        });
+
         const userPoolClient = new cognito.UserPoolClient(this, `${props.constants.APP_NAME}-AppClient`, {
             userPool: userPool,
             userPoolClientName: `${props.constants.APP_NAME}-AppClient`,

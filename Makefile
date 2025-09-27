@@ -16,7 +16,6 @@ MOBILE_DIR := app
 
 # --- Categorized Script Directories ---
 AWS_SCRIPTS_DIR := $(SCRIPTS_DIR)/aws
-TESTING_SCRIPTS_DIR := $(SCRIPTS_DIR)/testing
 BUILD_SCRIPTS_DIR := $(SCRIPTS_DIR)/build
 UTILS_SCRIPTS_DIR := $(SCRIPTS_DIR)/utils
 
@@ -27,9 +26,8 @@ UTILS_SCRIPTS_DIR := $(SCRIPTS_DIR)/utils
 # MODULAR MAKEFILE INCLUDES
 # ===============================
 
-include .makefiles/infrastructure.mk
-include .makefiles/testing.mk
-include .makefiles/frontend.mk
+include .makefiles/aws.mk
+include .makefiles/mobile.mk
 include .makefiles/setup.mk
 
 # ===============================

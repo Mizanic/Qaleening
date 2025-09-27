@@ -21,6 +21,8 @@ type AppUser = {
     email: string;
     given_name?: string;
     family_name?: string;
+    role?: string;
+    groups?: string[];
 };
 
 interface AuthErrorInfo {
@@ -32,6 +34,7 @@ interface AuthState {
     user: AppUser | null;
     isLoading: boolean;
     isAuthenticated: boolean;
+    isAdmin: boolean;
     lastError: AuthErrorInfo | null;
     login: (email: string, password: string) => Promise<{ success: true } | { success: false; code?: string; message?: string }>;
     logout: () => Promise<void>;
@@ -56,10 +59,13 @@ const auth = new CognitoAuth({
 
 export const useAuthStore = create<AuthState>()(
     persist(
-        (set) => ({
+        (set, get) => ({
             user: auth.store.getState().user ?? null,
             isLoading: false,
             isAuthenticated: auth.isAuthenticated(),
+            get isAdmin() {
+                return get().user?.role === "admin" || !!get().user?.groups?.includes("admin");
+            },
             lastError: null,
 
             login: async (email: string, password: string) => {
@@ -75,7 +81,11 @@ export const useAuthStore = create<AuthState>()(
                 try {
                     await auth.login(username, pwd);
                     const { user } = auth.store.getState();
-                    set({ user: user ?? null, isAuthenticated: !!user, lastError: null });
+                    set({
+                        user: user ?? null,
+                        isAuthenticated: !!user,
+                        lastError: null,
+                    });
                     return { success: true } as const;
                 } catch (e: unknown) {
                     const code = (e as any)?.code ?? (e as any)?.name;
@@ -103,6 +113,6 @@ export const useAuthStore = create<AuthState>()(
 );
 
 export const useAuth = () => {
-    const { user, isLoading, isAuthenticated, login, logout } = useAuthStore();
-    return { user, isLoading, isAuthenticated, login, logout };
+    const { user, isLoading, isAuthenticated, isAdmin, login, logout } = useAuthStore();
+    return { user, isLoading, isAuthenticated, isAdmin, login, logout };
 };

@@ -140,5 +140,3 @@ function mergeStatusUser(status: AuthStatus, user: UserAttributes | null): AuthS
     }
     return status;
 }
-
-

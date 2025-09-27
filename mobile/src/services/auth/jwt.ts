@@ -21,6 +21,9 @@ export function extractAttributesFromIdToken(token: string): UserAttributes {
         email: payload.email,
         given_name: payload.given_name,
         family_name: payload.family_name,
+        // Extract role information from Cognito groups
+        role: payload["cognito:groups"]?.[0] || "user", // Default to 'user' if no groups
+        groups: payload["cognito:groups"] || [],
     } as UserAttributes;
     // Copy any additional string fields
     for (const key of Object.keys(payload)) {
@@ -31,5 +34,3 @@ export function extractAttributesFromIdToken(token: string): UserAttributes {
     }
     return attrs;
 }
-
-

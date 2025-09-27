@@ -47,7 +47,9 @@ export type UserAttributes = {
     email: string;
     given_name: string;
     family_name: string;
-    [key: string]: string;
+    role?: string;
+    groups?: string[];
+    [key: string]: string | string[] | undefined;
 };
 
 export type User = z.infer<typeof UserSchema>;
