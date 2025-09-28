@@ -1,11 +1,10 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { DrawerToggleButton } from "@react-navigation/drawer";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useTheme } from "@/hooks/useTheme";
 import { View } from "react-native";
 
-const MainTabs: React.FC = () => {
+const BottomTabs: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { colors } = useTheme();
 
     return (
@@ -30,23 +29,10 @@ const MainTabs: React.FC = () => {
                     },
                 }}
             >
-                <Tabs.Screen
-                    name="index"
-                    options={{
-                        title: "Dashboard",
-                        tabBarIcon: ({ color }) => <MaterialIcons size={28} name="dashboard" color={color} />,
-                    }}
-                />
-                <Tabs.Screen
-                    name="mosques"
-                    options={{
-                        title: "Mosques",
-                        tabBarIcon: ({ color }) => <MaterialIcons size={28} name="mosque" color={color} />,
-                    }}
-                />
+                {children}
             </Tabs>
         </View>
     );
 };
 
-export default MainTabs;
+export default BottomTabs;

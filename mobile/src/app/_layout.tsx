@@ -22,7 +22,7 @@ if (typeof global.crypto === "undefined") {
 }
 
 const RootLayout: React.FC = () => {
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, isAdmin } = useAuth();
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
@@ -33,14 +33,19 @@ const RootLayout: React.FC = () => {
                         {/* Public routes - always accessible */}
                         <Stack.Screen name="index" />
 
-                        {/* Private routes - only accessible if NOT authenticated */}
+                        {/* Auth routes - only accessible if NOT authenticated */}
                         <Stack.Protected guard={!isAuthenticated}>
                             <Stack.Screen name="(auth)" options={{ headerShown: false }} />
                         </Stack.Protected>
 
-                        {/* Private routes - only accessible if authenticated */}
-                        <Stack.Protected guard={isAuthenticated}>
-                            <Stack.Screen name="private" options={{ headerShown: false }} />
+                        {/* User routes - only accessible if authenticated */}
+                        <Stack.Protected guard={isAuthenticated && !isAdmin}>
+                            <Stack.Screen name="(user)" options={{ headerShown: false }} />
+                        </Stack.Protected>
+
+                        {/* Admin routes - only accessible if authenticated and isAdmin */}
+                        <Stack.Protected guard={isAuthenticated && isAdmin}>
+                            <Stack.Screen name="(admin)" options={{ headerShown: false }} />
                         </Stack.Protected>
                     </Stack>
                 </SafeAreaProvider>
