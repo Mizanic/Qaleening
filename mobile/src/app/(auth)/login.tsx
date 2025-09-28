@@ -22,7 +22,7 @@ const LoginScreen: React.FC = () => {
 
         const result = await login(email, password);
         if (result.success) {
-            router.replace("/private");
+            router.replace("/(user)/(tabs)");
         } else {
             const msg =
                 result.message ||

@@ -1,6 +1,15 @@
 import React from "react";
-import AdminDashboard from "@/screens/Dashboard/admin-dashboard";
+import { View, Text } from "react-native";
+import { useTheme } from "@/hooks/useTheme";
 
-export default function AdminDashboardScreen() {
-    return <AdminDashboard />;
-}
+const AdminDashboard: React.FC = () => {
+    const { colors } = useTheme();
+
+    return (
+        <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.surface.primary }}>
+            <Text style={{ color: colors.content.primary }}>Admin Dashboard</Text>
+        </View>
+    );
+};
+
+export default AdminDashboard;

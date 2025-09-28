@@ -8,7 +8,7 @@ interface BackButtonProps {
     fallbackRoute?: string;
 }
 
-const BackButton: React.FC<BackButtonProps> = ({ fallbackRoute = "/private/(tabs)" }) => {
+const BackButton: React.FC<BackButtonProps> = ({ fallbackRoute = "(user)/(tabs)" }) => {
     const { colors } = useTheme();
 
     const handleBack = () => {

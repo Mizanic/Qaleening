@@ -36,7 +36,7 @@ const Settings: React.FC = () => {
             <Stack.Screen
                 options={{
                     headerShown: true,
-                    headerLeft: () => <BackButton fallbackRoute="/private/(tabs)" />,
+                    headerLeft: () => <BackButton />,
                     headerStyle: {
                         backgroundColor: colors.surface.secondary,
                     },

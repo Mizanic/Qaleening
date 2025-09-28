@@ -1,10 +1,10 @@
 import React from "react";
 import { View, ScrollView, Text, StyleSheet } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "@/hooks/useTheme";
-import { Typography } from "../styles/typography";
+import { Typography } from "@/styles/typography";
 import MosqueCard from "@/components/ui/MosqueCard";
 import { Mosque } from "@/types/mosqueTypes";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useMosqueData } from "@/hooks/useMosqueData";
 
 const MosquesScreen: React.FC = () => {

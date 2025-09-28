@@ -19,7 +19,7 @@ const Index: React.FC = () => {
     // Redirect based on authentication status
     // Protected routes will handle access control, but we still need initial navigation
     if (isAuthenticated) {
-        return <Redirect href="/private" />;
+        return <Redirect href="/(user)/(tabs)" />;
     } else {
         return <Redirect href="/(auth)/login" />;
     }
