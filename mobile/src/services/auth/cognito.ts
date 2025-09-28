@@ -13,7 +13,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { type AuthConfig, type AuthResult, type User, type UserAttributes, UserSchema } from "./types";
 import { type AuthStore, type CreateAuthStoreOptions, createAuthStore } from "./store";
-import { extractAttributesFromIdToken, extractAttributesFromTokens, parseJwtUniversal } from "./jwt";
+import { extractAttributesFromTokens, parseJwtUniversal } from "./jwt";
 import { AuthError, ValidationError } from "./errors";
 import { ZodError } from "zod";
 
