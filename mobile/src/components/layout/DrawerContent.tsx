@@ -18,7 +18,7 @@ const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
     return (
         <DrawerContentScrollView {...props} style={{ backgroundColor: colors.surface.primary }}>
             {/* User Profile Section */}
-            <TouchableOpacity style={styles.profileSection} onPress={() => router.push("/private/my-profile")}>
+            <TouchableOpacity style={styles.profileSection} onPress={() => router.push("/private/(user)/my-profile")}>
                 <View style={styles.profileContent}>
                     <View style={[styles.avatar, { backgroundColor: colors.interactive.primary.default }]}>
                         <Text style={[styles.avatarText, { color: colors.content.inverse }]}>JD</Text>

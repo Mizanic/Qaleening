@@ -1,15 +1,19 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
+import UserDashboard from "@/screens/Dashboard/user-dashboard";
+import AdminDashboard from "@/screens/Dashboard/admin-dashboard";
+import { useAuth } from "@/stores/authStore";
 
-const ScheduledPosts: React.FC = () => {
+const Dashboard: React.FC = () => {
     const { colors } = useTheme();
+    const { isAdmin } = useAuth();
 
     return (
-        <View className="flex-1 justify-center items-center" style={{ backgroundColor: colors.surface.primary }}>
-            <Text style={{ color: colors.content.primary }}>Scheduled Posts</Text>
+        <View className="flex-1" style={{ backgroundColor: colors.surface.primary }}>
+            {isAdmin ? <AdminDashboard /> : <UserDashboard />}
         </View>
     );
 };
 
-export default ScheduledPosts;
+export default Dashboard;
