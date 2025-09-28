@@ -23,6 +23,7 @@ if (typeof global.crypto === "undefined") {
 
 const RootLayout: React.FC = () => {
     const { isAuthenticated, isAdmin } = useAuth();
+    console.log("[Router] Guards", { isAuthenticated, isAdmin });
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>

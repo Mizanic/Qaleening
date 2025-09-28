@@ -4,7 +4,7 @@ import { View, ActivityIndicator } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
 
 const Index: React.FC = () => {
-    const { isAuthenticated, isLoading } = useAuth();
+    const { isAuthenticated, isLoading, isAdmin } = useAuth();
     const { colors } = useTheme();
 
     // Show loading spinner while checking auth status
@@ -19,7 +19,9 @@ const Index: React.FC = () => {
     // Redirect based on authentication status
     // Protected routes will handle access control, but we still need initial navigation
     if (isAuthenticated) {
-        return <Redirect href="/(user)/(tabs)" />;
+        const target = isAdmin ? "/(admin)/dashboard" : "/(user)/(tabs)";
+        console.log("[Nav] Index redirect", { isAuthenticated, isAdmin, target });
+        return <Redirect href={target} />;
     } else {
         return <Redirect href="/(auth)/login" />;
     }

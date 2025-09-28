@@ -34,3 +34,26 @@ export function extractAttributesFromIdToken(token: string): UserAttributes {
     }
     return attrs;
 }
+
+export function extractAttributesFromTokens(idToken: string, accessToken?: string): UserAttributes {
+    const idPayload = parseJwtUniversal(idToken) as any;
+    const accessPayload = accessToken ? (parseJwtUniversal(accessToken) as any) : {};
+    const groups = (accessPayload["cognito:groups"] as string[] | undefined) ?? (idPayload["cognito:groups"] as string[] | undefined) ?? [];
+    const role = (idPayload["custom:role"] as string | undefined) ?? (groups.length > 0 ? groups[0] : undefined) ?? "user";
+
+    const attrs: UserAttributes = {
+        email: idPayload.email,
+        given_name: idPayload.given_name,
+        family_name: idPayload.family_name,
+        role,
+        groups,
+    } as UserAttributes;
+    // Copy additional string fields from id token
+    for (const key of Object.keys(idPayload)) {
+        const value = idPayload[key];
+        if (typeof value === "string" && !(key in attrs)) {
+            (attrs as any)[key] = value;
+        }
+    }
+    return attrs;
+}

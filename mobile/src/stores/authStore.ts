@@ -63,9 +63,7 @@ export const useAuthStore = create<AuthState>()(
             user: auth.store.getState().user ?? null,
             isLoading: false,
             isAuthenticated: auth.isAuthenticated(),
-            get isAdmin() {
-                return get().user?.role === "admin" || !!get().user?.groups?.includes("admin");
-            },
+            isAdmin: isAdminUser((auth.store.getState().user as any) ?? null),
             lastError: null,
 
             login: async (email: string, password: string) => {
@@ -84,7 +82,15 @@ export const useAuthStore = create<AuthState>()(
                     set({
                         user: user ?? null,
                         isAuthenticated: !!user,
+                        isAdmin: isAdminUser(user ?? null),
                         lastError: null,
+                    });
+                    const computedAdmin = isAdminUser(user ?? null);
+                    console.log("[AuthStore] Post-login snapshot", {
+                        email: user?.email,
+                        role: user?.role,
+                        groups: user?.groups,
+                        isAdmin: computedAdmin,
                     });
                     return { success: true } as const;
                 } catch (e: unknown) {
@@ -101,13 +107,13 @@ export const useAuthStore = create<AuthState>()(
 
             logout: async () => {
                 await auth.logout();
-                set({ user: null, isAuthenticated: false });
+                set({ user: null, isAuthenticated: false, isAdmin: false });
             },
         }),
         {
             name: "auth-storage",
             storage: createJSONStorage(() => AsyncStorage),
-            partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated }),
+            partialize: (state) => ({ user: state.user, isAuthenticated: state.isAuthenticated, isAdmin: state.isAdmin }),
         },
     ),
 );
@@ -116,3 +122,31 @@ export const useAuth = () => {
     const { user, isLoading, isAuthenticated, isAdmin, login, logout } = useAuthStore();
     return { user, isLoading, isAuthenticated, isAdmin, login, logout };
 };
+
+function isAdminUser(user: AppUser | null): boolean {
+    if (!user) return false;
+    const role = (user.role ?? "").toLowerCase();
+    const groups = (user.groups ?? []).map((g) => g.toLowerCase());
+    return role === "admin" || groups.includes("admin");
+}
+
+// Bridge updates from the internal auth store (tokens/user) to the UI store immediately
+auth.store.subscribe((state) => {
+    const isSignedIn = state.status.state === "signed_in";
+    const nextUser = (state.user as any) ?? null;
+    useAuthStore.setState({
+        user: nextUser,
+        isAuthenticated: isSignedIn,
+        isAdmin: isAdminUser(nextUser),
+    });
+    if (isSignedIn) {
+        try {
+            console.log("[AuthStore] Bridge update", {
+                email: nextUser?.email,
+                role: nextUser?.role,
+                groups: nextUser?.groups,
+                isAdmin: isAdminUser(nextUser ?? null),
+            });
+        } catch {}
+    }
+});

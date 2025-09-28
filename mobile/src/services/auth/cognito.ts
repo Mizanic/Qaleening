@@ -13,7 +13,7 @@ import {
 } from "@aws-sdk/client-cognito-identity-provider";
 import { type AuthConfig, type AuthResult, type User, type UserAttributes, UserSchema } from "./types";
 import { type AuthStore, type CreateAuthStoreOptions, createAuthStore } from "./store";
-import { extractAttributesFromIdToken, parseJwtUniversal } from "./jwt";
+import { extractAttributesFromIdToken, extractAttributesFromTokens, parseJwtUniversal } from "./jwt";
 import { AuthError, ValidationError } from "./errors";
 import { ZodError } from "zod";
 
@@ -47,7 +47,21 @@ export class CognitoAuth {
                     idToken: result.IdToken,
                     refreshToken: result.RefreshToken,
                 };
-                const user = extractAttributesFromIdToken(result.IdToken);
+                // Debug: Log token claims relevant for role/group detection
+                try {
+                    const idPayload = parseJwtUniversal(result.IdToken as string) as any;
+                    const accessPayload = parseJwtUniversal(result.AccessToken as string) as any;
+                    console.log("[CognitoAuth] Login claims", {
+                        idEmail: idPayload?.email,
+                        idGroups: idPayload?.["cognito:groups"],
+                        customRole: idPayload?.["custom:role"],
+                        accessGroups: accessPayload?.["cognito:groups"],
+                    });
+                } catch (e) {
+                    console.warn("[CognitoAuth] Failed to parse token payloads for logging", e);
+                }
+                const user = extractAttributesFromTokens(result.IdToken, result.AccessToken);
+                console.log("[CognitoAuth] Derived user from tokens", { role: user.role, groups: user.groups, email: user.email });
                 this.store.getState().setSignedIn(user, tokens);
                 return result;
             }
@@ -211,7 +225,21 @@ export class CognitoAuth {
                     refreshToken: refreshToken,
                 };
                 this.store.getState().updateTokens(tokens);
-                const user = extractAttributesFromIdToken(result.IdToken);
+                // Debug: Log token claims relevant for role/group detection on refresh
+                try {
+                    const idPayload = parseJwtUniversal(result.IdToken as string) as any;
+                    const accessPayload = parseJwtUniversal(result.AccessToken as string) as any;
+                    console.log("[CognitoAuth] Refresh claims", {
+                        idEmail: idPayload?.email,
+                        idGroups: idPayload?.["cognito:groups"],
+                        customRole: idPayload?.["custom:role"],
+                        accessGroups: accessPayload?.["cognito:groups"],
+                    });
+                } catch (e) {
+                    console.warn("[CognitoAuth] Failed to parse token payloads for logging (refresh)", e);
+                }
+                const user = extractAttributesFromTokens(result.IdToken, result.AccessToken);
+                console.log("[CognitoAuth] Derived user after refresh", { role: user.role, groups: user.groups, email: user.email });
                 this.store.getState().setUser(user);
                 return result;
             }

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, TextInput, Alert } from "react-native";
 import { useTheme } from "@/hooks/useTheme";
 import { useRouter } from "expo-router";
@@ -9,7 +9,7 @@ const LoginScreen: React.FC = () => {
     const insets = useSafeAreaInsets();
     const { colors } = useTheme();
     const router = useRouter();
-    const { login, isLoading } = useAuth();
+    const { login, isLoading, isAuthenticated, isAdmin } = useAuth();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -20,10 +20,9 @@ const LoginScreen: React.FC = () => {
             return;
         }
 
+        console.log("[Login] Attempt", { username: email.trim().toLowerCase() });
         const result = await login(email, password);
-        if (result.success) {
-            router.replace("/(user)/(tabs)");
-        } else {
+        if (!result.success) {
             const msg =
                 result.message ||
                 (result.code === "UserNotConfirmedException"
@@ -32,6 +31,13 @@ const LoginScreen: React.FC = () => {
             Alert.alert("Error", msg);
         }
     };
+
+    useEffect(() => {
+        if (!isAuthenticated) return;
+        const target = isAdmin ? "/(admin)/dashboard" : "/(user)/(tabs)";
+        console.log("[Login] Post-auth redirect", { isAuthenticated, isAdmin, target });
+        router.replace(target);
+    }, [isAuthenticated, isAdmin, router]);
 
     return (
         <View className="flex-1 px-lg justify-center items-center" style={{ backgroundColor: colors.surface.primary }}>
