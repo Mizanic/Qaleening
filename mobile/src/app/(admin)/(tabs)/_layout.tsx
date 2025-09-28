@@ -14,10 +14,10 @@ const AdminTabs: React.FC = () => {
                 }}
             />
             <Tabs.Screen
-                name="mosques"
+                name="requests"
                 options={{
-                    title: "Mosques",
-                    tabBarIcon: ({ color }) => <MaterialIcons size={28} name="mosque" color={color} />,
+                    title: "Requests",
+                    tabBarIcon: ({ color }) => <MaterialIcons size={28} name="assignment" color={color} />,
                 }}
             />
         </BottomTabs>

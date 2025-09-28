@@ -9,7 +9,7 @@ const AdminLayout: React.FC = () => {
 
     return (
         <Drawer
-            drawerContent={(props) => <DrawerContent {...props} />}
+            drawerContent={(props) => <DrawerContent {...props} variant="admin" />}
             screenOptions={{
                 drawerStyle: { backgroundColor: colors.surface.primary },
                 drawerActiveBackgroundColor: colors.interactive.neutral.pressed,
@@ -21,7 +21,7 @@ const AdminLayout: React.FC = () => {
             }}
         >
             <Drawer.Screen
-                name="dashboard"
+                name="(tabs)"
                 options={{
                     drawerLabel: "Admin Dashboard",
                     title: "Admin Dashboard",
@@ -29,32 +29,8 @@ const AdminLayout: React.FC = () => {
                     drawerIcon: ({ color }) => <MaterialIcons size={28} name="dashboard" color={color} />,
                 }}
             />
-            <Drawer.Screen
-                name="manage-requests"
-                options={{
-                    drawerLabel: "Requests",
-                    title: "Cleaning Requests",
-                    headerShown: false,
-                    drawerIcon: ({ color }) => <MaterialIcons size={28} name="assignment" color={color} />,
-                }}
-            />
-            <Drawer.Screen
-                name="mosques"
-                options={{
-                    drawerLabel: "Mosques",
-                    title: "Mosques",
-                    headerShown: false,
-                    drawerIcon: ({ color }) => <MaterialIcons size={28} name="mosque" color={color} />,
-                }}
-            />
-            <Drawer.Screen
-                name="settings"
-                options={{
-                    drawerLabel: "Settings",
-                    title: "Settings",
-                    drawerIcon: ({ color }) => <MaterialIcons size={28} name="settings" color={color} />,
-                }}
-            />
+            {/* Hide legacy manage-requests file route to avoid duplicate menu item */}
+            <Drawer.Screen name="manage-requests" options={{ drawerLabel: "Requests", title: "Requests" }} />
         </Drawer>
     );
 };

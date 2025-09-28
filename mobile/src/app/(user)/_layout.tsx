@@ -9,7 +9,7 @@ const UserLayout: React.FC = () => {
 
     return (
         <Drawer
-            drawerContent={(props) => <DrawerContent {...props} />}
+            drawerContent={(props) => <DrawerContent {...props} variant="user" />}
             screenOptions={{
                 drawerStyle: { backgroundColor: colors.surface.primary },
                 drawerActiveBackgroundColor: colors.interactive.neutral.pressed,

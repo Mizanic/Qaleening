@@ -5,7 +5,9 @@ import { DrawerContentScrollView, DrawerItemList, DrawerContentComponentProps } 
 import { router } from "expo-router";
 import { useAuth } from "@/stores/authStore";
 
-const DrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
+type DrawerContentProps = DrawerContentComponentProps & { variant?: "admin" | "user" };
+
+const DrawerContent: React.FC<DrawerContentProps> = (props) => {
     const { colors } = useTheme();
     const { logout } = useAuth();
 

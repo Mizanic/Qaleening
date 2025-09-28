@@ -34,7 +34,7 @@ const LoginScreen: React.FC = () => {
 
     useEffect(() => {
         if (!isAuthenticated) return;
-        const target = isAdmin ? "/(admin)/dashboard" : "/(user)/(tabs)";
+        const target = isAdmin ? "/(admin)/(tabs)" : "/(user)/(tabs)";
         console.log("[Login] Post-auth redirect", { isAuthenticated, isAdmin, target });
         router.replace(target);
     }, [isAuthenticated, isAdmin, router]);
