@@ -55,13 +55,13 @@ export class ApiStack extends Stack {
         const commonLayer = lambda.LayerVersion.fromLayerVersionArn(
             this,
             `${props.constants.APP_NAME}-CommonLayer`,
-            commonLayerArn.stringValue
+            commonLayerArn.stringValue,
         );
 
         const powertoolsLayer = lambda.LayerVersion.fromLayerVersionArn(
             this,
             `${props.constants.APP_NAME}-PowertoolsLayer`,
-            powertoolsLayerArn.stringValue
+            powertoolsLayerArn.stringValue,
         );
 
         const apiFn = new lambda.Function(this, `${props.constants.APP_NAME}-ApiHandler`, {
