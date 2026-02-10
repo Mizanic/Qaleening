@@ -7,12 +7,10 @@
 # Python imports
 
 from os import getenv
-from typing import Annotated, Optional
 
 # ==================================================================================================
 # AWS imports
 from aws_lambda_powertools.event_handler import APIGatewayRestResolver, CORSConfig
-from aws_lambda_powertools.event_handler.openapi.params import Body, Query
 from aws_lambda_powertools.utilities.typing import LambdaContext
 
 # ==================================================================================================
