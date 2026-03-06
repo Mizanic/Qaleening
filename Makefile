@@ -47,15 +47,13 @@ install-dependencies:
 setup: install-dependencies
 	@echo "Initializing project..."
 
-
+bucket:
+	@echo "🔨 Creating S3 bucket..."
+	@./$(SCRIPTS_DIR)/aws/create-bucket.sh
 
 # ===============================
 # INFRA TARGETS
 # ===============================
-
-bucket:
-	@echo "🔨 Creating S3 bucket..."
-	@./$(SCRIPTS_DIR)/aws/create-bucket.sh
 
 
 layers:
@@ -80,6 +78,14 @@ validate:
 	@cd $(AWS_DIR) && cdk doctor
 
 .PHONY: help deploy destroy synth validate
+
+# ===============================
+# USER TARGETS
+# ===============================
+
+user:
+	@echo "🔨 Creating user..."
+	@./$(SCRIPTS_DIR)/aws/create-user.sh
 
 
 # ===============================
