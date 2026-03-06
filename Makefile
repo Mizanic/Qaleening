@@ -29,6 +29,18 @@ help:
 	@echo "  destroy        Destroy stack(s) (with confirmation)"
 	@echo "  synth          Generate CloudFormation templates"
 	@echo "  validate       Validate CDK application" 
+	@echo "\n================== MOBILE TARGETS ===================\n"
+	@echo "  mobile-dev     Start mobile dev server"
+	@echo "  mobile-build   Build mobile app"
+
+# ===============================
+# PROJECT TARGETS
+# ===============================
+init:
+	@echo "Initializing project..."
+	@cd $(AWS_DIR) && npm install
+	@cd $(MOBILE_DIR) && npm install
+
 
 # ===============================
 # INFRA TARGETS
@@ -52,3 +64,18 @@ validate:
 	@cd $(AWS_DIR) && cdk doctor
 
 .PHONY: help deploy destroy synth validate
+
+
+# ===============================
+# MOBILE TARGETS
+# ===============================
+
+mobile-dev:
+	@echo "📱 Starting mobile dev server..."
+	@./$(SCRIPTS_DIR)/$(MOBILE_DIR)/mobile-dev.sh
+
+mobile-build:
+	@echo "🔨 Building mobile app..."
+	@./$(SCRIPTS_DIR)/$(MOBILE_DIR)/mobile-build.sh
+
+
