@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ===============================
-# Kaleening Common Utilities
+# Qaleening Common Utilities
 # ===============================
 # Source this file in other scripts: source "$(dirname "$0")/common.sh"
 
