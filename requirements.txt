@@ -1,2 +1,1 @@
--r aws/requirements.txt
 -e aws/src/shared

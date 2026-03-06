@@ -1,12 +1,9 @@
 import config from "../config.json";
-import { aws_ssm as ssm } from "aws-cdk-lib";
 
 ////////////////////////////////////////////////////////////
 // CONSTANTS
 ////////////////////////////////////////////////////////////
 
-const PAGE_SIZE = 50;
-const REGION = "us-east-1";
 const PYTHON_VERSION = "3.13";
 const VERSION = "latest";
 const ARCH = "x86_64";
@@ -24,7 +21,6 @@ const LOG_LEVEL = "DEBUG";
 
 export const CONSTANTS = {
     APP_NAME,
-    PAGE_SIZE,
     SSM_POWERTOOLS_LAYER,
     LOG_LEVEL,
 };

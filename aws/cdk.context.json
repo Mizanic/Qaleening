@@ -1,4 +1,8 @@
 {
-    "acknowledged-issue-numbers": [32775, 34892],
-    "cli-telemetry": false
+  "acknowledged-issue-numbers": [
+    32775,
+    34892,
+    37013
+  ],
+  "cli-telemetry": false
 }

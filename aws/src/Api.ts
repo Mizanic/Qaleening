@@ -72,7 +72,6 @@ export class ApiStack extends Stack {
             layers: [commonLayer, powertoolsLayer],
             environment: {
                 TABLE_NAME: table.tableName,
-                PAGE_SIZE: props.constants.PAGE_SIZE.toString(),
             },
         });
 
