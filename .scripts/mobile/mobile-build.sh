@@ -1,13 +1,17 @@
 #!/bin/bash
 
+source "$(dirname "$0")/../common.sh"
+show_script_header "Mobile Build" "Build the mobile app"
+setup_cleanup
+
 export NODE_ENV=development
 
 set -euo pipefail
 
 # Absolute project root for WSL-friendly paths
-PROJECT_ROOT="/home/rehan/kaleening"
-MOBILE_DIR="$PROJECT_ROOT/mobile"
-ANDROID_DIR="$PROJECT_ROOT/mobile/android"
+PROJECT_ROOT="$QALEENING_PROJECT_ROOT"
+MOBILE_DIR="$QALEENING_MOBILE_DIR"
+ANDROID_DIR="$QALEENING_MOBILE_DIR/android"
 APP_JSON_FILE="$MOBILE_DIR/app.json"
 
 today=$(date +%Y%m%d)

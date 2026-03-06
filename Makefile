@@ -1,5 +1,5 @@
 # ===============================
-# Kaleening Project Makefile
+# Qaleening Project Makefile
 # ===============================
 
 PROJECT_NAME ?= Qaleening
@@ -8,7 +8,7 @@ PROJECT_NAME ?= Qaleening
 # --- Core Configuration ---
 
 STACK ?= --all
-FULL_STACK_NAME = $(if $(filter --all,$(STACK)),$(STACK),SnapNews-$(STACK)Stack)
+FULL_STACK_NAME = $(if $(filter --all,$(STACK)),$(STACK),$(PROJECT_NAME)-$(STACK)Stack)
 ENV ?= dev
 
 SCRIPTS_DIR := .scripts
@@ -24,6 +24,8 @@ help:
 	@echo "\nUsage: make [target] [VAR=value]\n"
 	@echo "Available commands:"
 	@echo "  make help        Show this help message"
+	@echo "\n================== PROJECT TARGETS ===================\n"
+	@echo "  setup          Setup project"
 	@echo "\n================== INFRA TARGETS ===================\n"
 	@echo "  deploy         Deploy stack(s) [STACK=name]"
 	@echo "  destroy        Destroy stack(s) (with confirmation)"
@@ -36,15 +38,24 @@ help:
 # ===============================
 # PROJECT TARGETS
 # ===============================
-init:
-	@echo "Initializing project..."
+install-dependencies:
+	@echo "Installing dependencies..."
 	@cd $(AWS_DIR) && npm install
 	@cd $(MOBILE_DIR) && npm install
+
+# Only used for fresh install
+setup: install-dependencies
+	@echo "Initializing project..."
+
 
 
 # ===============================
 # INFRA TARGETS
 # ===============================
+
+layers:
+	@echo "🔨 Creating Lambda layers..."
+	@./$(SCRIPTS_DIR)/aws/create-layers.sh
 
 deploy:
 	@echo "🚀 Deploying stack(s): [$(FULL_STACK_NAME)]"

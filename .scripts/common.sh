@@ -5,6 +5,16 @@
 # ===============================
 # Source this file in other scripts: source "$(dirname "$0")/common.sh"
 
+# --- Configuration ---
+export PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+export SCRIPTS_DIR="${PROJECT_ROOT}/.scripts"
+export BACKEND_DIR="${PROJECT_ROOT}/aws"
+export MOBILE_DIR="${PROJECT_ROOT}/mobile"
+export CONFIG_FILE="${PROJECT_ROOT}/config.json"
+
+# Get the project name
+PROJECT_NAME=$(cat ${CONFIG_FILE} | jq -r '.PROJECT_NAME' | tr -d ' ')
+
 # --- Colors ---
 export RED='\033[0;31m'
 export GREEN='\033[0;32m'
@@ -14,11 +24,7 @@ export PURPLE='\033[0;35m'
 export CYAN='\033[0;36m'
 export NC='\033[0m' # No Color
 
-# --- Configuration ---
-export KALEENING_PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-export KALEENING_SCRIPTS_DIR="${KALEENING_PROJECT_ROOT}/.scripts"
-export KALEENING_BACKEND_DIR="${KALEENING_PROJECT_ROOT}/backend"
-export KALEENING_CONFIG_FILE="${KALEENING_PROJECT_ROOT}/config.json"
+
 
 # --- Logging Functions ---
 log_info() {
@@ -38,7 +44,7 @@ log_error() {
 }
 
 log_debug() {
-    [[ "${KALEENING_DEBUG:-}" == "1" ]] && echo -e "${PURPLE}🐛 $1${NC}" >&2
+    [[ "${DEBUG:-}" == "1" ]] && echo -e "${PURPLE}🐛 $1${NC}" >&2
 }
 
 fatal() {
@@ -121,8 +127,8 @@ get_project_config() {
     local key="$1"
     local default="${2:-}"
     
-    if [[ -f "$KALEENING_CONFIG_FILE" ]]; then
-        jq -r ".$key // \"$default\"" "$KALEENING_CONFIG_FILE" 2>/dev/null || echo "$default"
+    if [[ -f "$CONFIG_FILE" ]]; then
+        jq -r ".$key // \"$default\"" "$CONFIG_FILE" 2>/dev/null || echo "$default"
     else
         echo "$default"
     fi
@@ -134,7 +140,7 @@ show_script_header() {
     local description="$2"
     
     echo -e "${CYAN}======================================${NC}"
-    echo -e "${CYAN}Kaleening: $script_name${NC}"
+    echo -e "${CYAN}$(PROJECT_NAME): $script_name${NC}"
     echo -e "${CYAN}======================================${NC}"
     [[ -n "$description" ]] && echo -e "${BLUE}$description${NC}"
     echo
@@ -142,7 +148,7 @@ show_script_header() {
 
 # --- Cleanup helpers ---
 cleanup_temp_files() {
-    local pattern="${1:-/tmp/kaleening-*}"
+    local pattern="${1:-/tmp/$(PROJECT_NAME)-*}"
     rm -f $pattern 2>/dev/null || true
 }
 
