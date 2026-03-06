@@ -140,7 +140,7 @@ show_script_header() {
     local description="$2"
     
     echo -e "${CYAN}======================================${NC}"
-    echo -e "${CYAN}$(PROJECT_NAME): $script_name${NC}"
+    echo -e "${CYAN}(${PROJECT_NAME}): $script_name${NC}"
     echo -e "${CYAN}======================================${NC}"
     [[ -n "$description" ]] && echo -e "${BLUE}$description${NC}"
     echo
@@ -148,7 +148,7 @@ show_script_header() {
 
 # --- Cleanup helpers ---
 cleanup_temp_files() {
-    local pattern="${1:-/tmp/$(PROJECT_NAME)-*}"
+    local pattern="${1:-/tmp/${PROJECT_NAME}-*}"
     rm -f $pattern 2>/dev/null || true
 }
 

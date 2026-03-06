@@ -53,6 +53,11 @@ setup: install-dependencies
 # INFRA TARGETS
 # ===============================
 
+bucket:
+	@echo "🔨 Creating S3 bucket..."
+	@./$(SCRIPTS_DIR)/aws/create-bucket.sh
+
+
 layers:
 	@echo "🔨 Creating Lambda layers..."
 	@./$(SCRIPTS_DIR)/aws/create-layers.sh
